@@ -5,4 +5,8 @@ router.get('/', function(req, res) {
     res.send('Welcome to API!');
 });
 
+require('./AuthRoutes')(router);
+// require('./CustomerRoutes')(router);
+// require('./BeauticianRoutes')(router);
+
 module.exports.router = router;

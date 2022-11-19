@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const UserRole = require('../enums/UserRole');
@@ -30,7 +30,7 @@ var UserSchema = new Schema({
     role: {
         type: String,
         enum: UserRole,
-        default: UserRole.User
+        default: UserRole.CUSTOMER
     },
     profile_image: {
         type: String,
@@ -67,6 +67,35 @@ UserSchema.pre('save', function(next) {
         return next();
     }
 });
+
+//for comparing the user entered password with database doing loging
+UserSchema.methods.comparePassword = function (candidatePassowrd, callBack){
+    bcrypt.compare(candidatePassword, this.password, function (err, isMatch){
+        if (err) return callBack(err);
+        callBack(null, isMatch);
+    });
+};
+
+//for generating token when loging
+UserSchema.methods.generateToken = function (callBack){
+    var user = this;
+    var token = jwt.sign(user._id.toHexString().process.env.SECRETE);
+
+    callBack(null, token);
+};
+
+//validateing token for auth routes middleware
+UserSchema.static.findByToken = function (token,callBack){
+    jwt.verify(token, process.env.SECRETE, function(err, decode){
+        //This decode must give user_id if token is valide .ie decode = user_id
+        User.findById.Id(decode, function(err, user){
+            if (err){
+                resizeBy.json({staus: false, data: "Invalid User ID"});
+            }
+            callBack(null, user);
+        });
+    });
+};
 
 const User = mongoose.model('User', UserSchema);
 module.exports = {User};
