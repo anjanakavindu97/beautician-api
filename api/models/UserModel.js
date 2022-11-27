@@ -69,7 +69,7 @@ UserSchema.pre('save', function(next) {
 });
 
 //for comparing the user entered password with database doing loging
-UserSchema.methods.comparePassword = function (candidatePassowrd, callBack){
+UserSchema.methods.comparePassword = function (candidatePassword, callBack){
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch){
         if (err) return callBack(err);
         callBack(null, isMatch);
@@ -79,7 +79,7 @@ UserSchema.methods.comparePassword = function (candidatePassowrd, callBack){
 //for generating token when loging
 UserSchema.methods.generateToken = function (callBack){
     var user = this;
-    var token = jwt.sign(user._id.toHexString().process.env.SECRETE);
+    var token = jwt.sign(user._id.toHexString(), process.env.SECRETE);
 
     callBack(null, token);
 };
