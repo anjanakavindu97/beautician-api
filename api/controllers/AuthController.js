@@ -33,7 +33,7 @@ exports.loginUser = (req, res) => {
                         message: "Wrong password"
                     });
                 } else {
-                    user.generateToken((err, user) => {
+                    user.generateToken((err, token) => {
                         if(err) {
                             return res.status(400).json({
                                 success: false,
@@ -45,7 +45,7 @@ exports.loginUser = (req, res) => {
                                 success: true,
                                 message: "Successfully Logged In!",
                                 data : {
-                                    "token": user
+                                    "token": token
                                 }
                             });
                         }
@@ -55,3 +55,11 @@ exports.loginUser = (req, res) => {
         }
     });
 };
+
+exports.getUserDetalis = (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: "User Details",
+        data: req.user
+    });
+}
