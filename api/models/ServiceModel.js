@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-const {ServiceTag} = require('./ServiceTagModel');
+const { ServiceTag } = require('./ServiceTagModel');
 
 var ServiceModelSchema = new Schema({
     title: {
@@ -12,11 +12,11 @@ var ServiceModelSchema = new Schema({
         required: [true, 'Description field is required']
     },
     image: {
-        type: String,
+        type: String
     },
     service_tag: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ServiceTag',
+        ref: ServiceTag,
         required: [true, 'ServiceTag field is required']
     },
     price: {
@@ -34,5 +34,16 @@ var ServiceModelSchema = new Schema({
     }
 });
 
+ServiceModelSchema.index({
+    title: 'text',
+    description: 'text'
+}, {
+    weights: {
+        title: 3,
+        description: 5
+    }
+})
+
 const Service = mongoose.model('Service', ServiceModelSchema);
-module.exports = {Service};
+module.exports = { Service };
+

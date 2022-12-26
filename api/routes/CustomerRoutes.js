@@ -1,10 +1,9 @@
-// module.exports = function(app) {
-//     const {Auth} = require('../middleware/auth');
-//     const {Auth} = require('../middleware/auth');
+module.exports = function(app) {
+    const {Auth} = require('../middleware/auth');
+    const {Customer} = require('../middleware/customer');
 
-//     const CustomerController = require('../controllers/CustomerController');
+    const CustomerController = require('../controllers/CustomerController');
 
-//     app.get("/register", AuthController.registerUser);
-//     app.post("/login", AuthController.loginUser);
-//     app.get("/user", Auth, AuthController.getUserDetalis);
-// }
+    app.get("/beautician/:id", [Auth, Customer], CustomerController.viewBeauticianById);
+    app.post("/search_services", [Auth, Customer], CustomerController.searchServices);
+}

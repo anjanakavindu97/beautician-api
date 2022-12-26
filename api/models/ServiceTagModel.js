@@ -13,4 +13,4 @@ var ServiceTagModelSchema = new Schema({
 });
 
 const ServiceTag = mongoose.model('ServiceTag', ServiceTagModelSchema);
-module.exports = {ServiceTag};
+module.exports = { ServiceTag }
